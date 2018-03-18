@@ -2,6 +2,8 @@
 
 #include "Entity.hpp"
 #include "ResourceIdentifiers.hpp"
+#include "Weapon.h"
+#include "Command.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <cmath>
 
@@ -10,10 +12,7 @@ class Character : public Entity
 {
 	public:
 		enum Type{
-			//PlayerUp,
 			Player,
-			//PlayerLeft,
-			//PlayerRight,
 			EnemyZ,
 			EnemyD,
 			TypeCount,
@@ -25,11 +24,15 @@ class Character : public Entity
 		virtual unsigned int	getCategory() const;
 		float getMaxSpeed() const;
 		float toRadian(float degree);
+		void shoot();
+		bool isAllied() const;
 
 
 	private:
 		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-
+		 void checkBulletLaunch(sf::Time dt, CommandQueue& commands);
+		 void createBullets(SceneNode& node, const TextureHolder& textures) const;
+		 void createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const;
 
 	private:
 		Type mType;
@@ -38,5 +41,10 @@ class Character : public Entity
 		std::size_t mDirectionIndex;
 		void updateMovementPattern(sf::Time dt);
 		void updateCurrent(sf::Time dt, CommandQueue& commands);
+		bool mIsFiring;
+		sf::Time mFireCountdown;
+		Command mFireCommand;
+		int mFireRateLevel;
+		int mSpreadLevel;
 };
 
