@@ -20,15 +20,13 @@ class Entity : public SceneNode
 		//void heal(int hp);
 		//void damage(int dmg);
 		//void destroy();
-		//int getHitpoints() const;
-		//bool isDestroyed() const;
+		//int getHP() const;
+		bool isDestroyed() const;
 
+	protected:
+		virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 	private:
 		int mHP;
-		virtual void updateCurrent(sf::Time dt);
-
-
-	private:
 		sf::Vector2f mVelocity;
 };
 

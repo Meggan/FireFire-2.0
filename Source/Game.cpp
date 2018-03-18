@@ -5,7 +5,7 @@
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 Game::Game()
-: mWindow(sf::VideoMode(800, 480), "FireFire", sf::Style::Close)
+: mWindow(sf::VideoMode(480, 700), "FireFire", sf::Style::Close)
 , mWorld(mWindow)
 , mPlayer()
 , mFont()
@@ -88,3 +88,4 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsNumFrames = 0;
 	}
 }
+

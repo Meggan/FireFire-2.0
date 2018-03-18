@@ -27,6 +27,11 @@ void Entity::accelerate(float vx, float vy){
 	mVelocity.y += vy;
 }
 
-void Entity::updateCurrent(sf::Time dt){	
+void Entity::updateCurrent(sf::Time dt, CommandQueue&) {
 	move(mVelocity * dt.asSeconds());
+}
+
+bool Entity::isDestroyed() const
+{
+	return mHP <= 0;
 }

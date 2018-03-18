@@ -15,7 +15,8 @@ class Character : public Entity
 			Player,
 			//PlayerLeft,
 			//PlayerRight,
-			Enemy,
+			EnemyZ,
+			EnemyD,
 			TypeCount,
 		};
 
@@ -37,5 +38,6 @@ class Character : public Entity
 		float					mTravelledDistance;
 		std::size_t				mDirectionIndex;
 		void					updateMovementPattern(sf::Time dt);
+		void		updateCurrent(sf::Time dt, CommandQueue& commands);
 };
 

@@ -2,7 +2,7 @@
 #include "CommandQueue.hpp"
 #include "Character.hpp"
 #include "Foreach.hpp"
-
+#include <iostream>
 #include <map>
 #include <string>
 #include <algorithm>
@@ -26,12 +26,14 @@ struct CharacterMover
 Player::Player()
 {
 	// Set initial key bindings
-	mKeyBinding[sf::Keyboard::W] = MoveUp;
-	mKeyBinding[sf::Keyboard::S] = MoveDown;
-	mKeyBinding[sf::Keyboard::A] = MoveLeft;
-	mKeyBinding[sf::Keyboard::D] = MoveRight;
+	mKeyBinding[sf::Keyboard::Up] = MoveUp;
+	mKeyBinding[sf::Keyboard::Down] = MoveDown;
+	mKeyBinding[sf::Keyboard::Left] = MoveLeft;
+	mKeyBinding[sf::Keyboard::Right] = MoveRight;
 	mKeyBinding[sf::Keyboard::Space] = Shoot;
-	
+	mKeyBinding[sf::Keyboard::PageUp] = WeaponUp;
+	mKeyBinding[sf::Keyboard::PageDown] = WeaponDown;
+
 	// Set initial action bindings
 	initializeActions();	
 

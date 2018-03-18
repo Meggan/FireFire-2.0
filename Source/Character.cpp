@@ -1,6 +1,7 @@
 #include "Character.hpp"
 #include "ResourceHolder.hpp"
 #include "../DataTables.h"
+#include "CommandQueue.hpp"
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <cmath>
@@ -21,6 +22,13 @@ Character::Character(Type type, const TextureHolder& textures)
 	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
 
+void Character::updateCurrent(sf::Time dt, CommandQueue& commands)
+{
+	
+	// Update enemy movement pattern; apply velocity
+	updateMovementPattern(dt);
+	Entity::updateCurrent(dt, commands);
+}
 
 Textures::ID toTextureID(Character::Type type)
 {
@@ -37,9 +45,11 @@ Textures::ID toTextureID(Character::Type type)
 
 		//case Character::PlayerRight:
 		//	return Textures::PlayerRight;
+	case Character::EnemyZ:
+		return Textures::EnemyZ;
 
-	case Character::Enemy:
-		return Textures::Enemy;
+	case Character::EnemyD:
+		return Textures::EnemyD;
 	}
 	return Textures::Player;
 }
@@ -55,12 +65,6 @@ unsigned int Character::getCategory() const
 	{
 		case Player:
 			return Category::PlayerCharacter;
-		//case PlayerUp:
-		//	return Category::PlayerCharacter;
-		//case PlayerLeft:
-		//	return Category::PlayerCharacter;
-		//case PlayerRight:
-		//	return Category::PlayerCharacter;
 
 		default:
 			return Category::EnemyCharacter;

@@ -19,6 +19,8 @@ class Player
 			MoveUp,
 			MoveDown,
 			Shoot,
+			WeaponUp,
+			WeaponDown,
 			ActionCount
 		};
 
