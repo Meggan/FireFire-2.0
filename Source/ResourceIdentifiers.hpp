@@ -18,6 +18,7 @@ namespace Textures
 		Enemy,
 		Background,
 		Ball,
+		Bomb,
 	};
 }
 

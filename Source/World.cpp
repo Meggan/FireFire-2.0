@@ -16,6 +16,7 @@ World::World(sf::RenderWindow& window)
 , mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
 //, mScrollSpeed(-50.f)
 , mPlayerCharacter(nullptr)
+, mEnemySpawnPoints()
 {
 	loadTextures();
 	buildScene();
@@ -55,6 +56,8 @@ void World::loadTextures()
 	mTextures.load(Textures::PlayerRight, "Media/Textures/CharacterRight.png");
 	mTextures.load(Textures::Background, "Media/Textures/Background.png");
 	mTextures.load(Textures::Ball, "Media/Textures/Pokeball.png");
+	mTextures.load(Textures::Enemy, "Media/Textures/Zubat.png");
+	mTextures.load(Textures::Bomb, "Media/Textures/Electrode.png");
 }
 
 void World::buildScene()
@@ -79,10 +82,10 @@ void World::buildScene()
 	mSceneLayers[Background]->attachChild(std::move(backgroundSprite));
 
 	// Add player's character
-	std::unique_ptr<Character> leader(new Character(Character::Player, mTextures));
-	mPlayerCharacter = leader.get();
+	std::unique_ptr<Character> player(new Character(Character::Player, mTextures));
+	mPlayerCharacter = player.get();
 	mPlayerCharacter->setPosition(mSpawnPosition);
-	mSceneLayers[Air]->attachChild(std::move(leader));
+	mSceneLayers[Air]->attachChild(std::move(player));
 }
 
 void World::adaptPlayerPosition()
@@ -110,3 +113,37 @@ void World::adaptPlayerVelocity()
 	// Add scrolling velocity
 	//mPlayerCharacter->accelerate(0.f, mScrollSpeed);
 }
+void World::spawnEnemies()
+{
+	// Spawns enemy zubats
+	while (!mEnemySpawnPoints.empty()
+		&& mEnemySpawnPoints.back().y > getEnemySpawnBounds().top)
+	{
+		SpawnPoint spawn = mEnemySpawnPoints.back();
+
+		std::unique_ptr<Character> zubat(new Character(spawn.type, mTextures));
+		zubat->setPosition(spawn.x, spawn.y);
+		zubat->setRotation(180.f);
+
+		mSceneLayers[Air]->attachChild(std::move(zubat));
+
+		// Enemy is spawned, remove from the list to spawn
+		mEnemySpawnPoints.pop_back();
+	}
+}
+
+sf::FloatRect World::getEnemySpawnBounds() const
+{
+	// Return view bounds + some area at top, where enemies spawn
+	sf::FloatRect bounds = getViewBounds();
+	bounds.top -= 100.f;
+	bounds.height += 100.f;
+
+	return bounds;
+}
+
+sf::FloatRect World::getViewBounds() const
+{
+	return sf::FloatRect(mWorldView.getCenter() - mWorldView.getSize() / 2.f, mWorldView.getSize());
+}
+

@@ -102,6 +102,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataTables.cpp" />
     <ClCompile Include="source\Character.cpp" />
     <ClCompile Include="source\Command.cpp" />
     <ClCompile Include="source\CommandQueue.cpp" />
@@ -118,6 +119,7 @@
     <None Include="source\StringHelpers.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataTables.h" />
     <ClInclude Include="source\Character.hpp" />
     <ClInclude Include="source\Category.hpp" />
     <ClInclude Include="source\Command.hpp" />

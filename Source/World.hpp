@@ -37,6 +37,11 @@ class World : private sf::NonCopyable
 		void								buildScene();
 		void								adaptPlayerPosition();
 		void								adaptPlayerVelocity();
+		void								addEnemies();
+		void								addEnemy(Character::Type type, float relX, float relY);
+		void spawnEnemies();
+		sf::FloatRect getViewBounds() const;
+		sf::FloatRect						getEnemySpawnBounds() const;
 
 
 	private:
@@ -47,18 +52,33 @@ class World : private sf::NonCopyable
 			LayerCount
 		};
 
+		struct SpawnPoint
+		{
+			SpawnPoint(Character::Type type, float x, float y)
+				: type(type)
+				, x(x)
+				, y(y)
+			{
+			}
+
+			Character::Type type;
+			float x;
+			float y;
+		};
 
 	private:
-		sf::RenderWindow&					mWindow;
-		sf::View							mWorldView;
-		TextureHolder						mTextures;
+		sf::RenderWindow& mWindow;
+		sf::View mWorldView;
+		TextureHolder mTextures;
 
-		SceneNode							mSceneGraph;
+		SceneNode mSceneGraph;
 		std::array<SceneNode*, LayerCount>	mSceneLayers;
-		CommandQueue						mCommandQueue;
+		CommandQueue mCommandQueue;
 
-		sf::FloatRect						mWorldBounds;
-		sf::Vector2f						mSpawnPosition;
-		float								mScrollSpeed;
-		Character*							mPlayerCharacter;
+		sf::FloatRect mWorldBounds;
+		sf::Vector2f mSpawnPosition;
+		float mScrollSpeed;
+		Character* mPlayerCharacter;
+
+		std::vector<SpawnPoint> mEnemySpawnPoints;
 };
