@@ -5,8 +5,7 @@
 
 
 //Main class for all Actors/Entities
-class Entity : public SceneNode
-{
+class Entity : public SceneNode{
 	public:
 		void setVelocity(sf::Vector2f vel);
 		void setVelocity(float vx, float vy);

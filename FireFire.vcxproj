@@ -102,16 +102,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataTables.cpp" />
     <ClCompile Include="source\Character.cpp" />
     <ClCompile Include="source\Command.cpp" />
     <ClCompile Include="source\CommandQueue.cpp" />
+    <ClCompile Include="Source\DataTables.cpp" />
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\SceneNode.cpp" />
     <ClCompile Include="source\SpriteNode.cpp" />
+    <ClCompile Include="Source\Weapon.cpp" />
     <ClCompile Include="source\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,11 +120,11 @@
     <None Include="source\StringHelpers.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataTables.h" />
     <ClInclude Include="source\Character.hpp" />
     <ClInclude Include="source\Category.hpp" />
     <ClInclude Include="source\Command.hpp" />
     <ClInclude Include="source\CommandQueue.hpp" />
+    <ClInclude Include="Source\DataTables.h" />
     <ClInclude Include="source\Entity.hpp" />
     <ClInclude Include="source\Foreach.hpp" />
     <ClInclude Include="source\Game.hpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="source\SceneNode.hpp" />
     <ClInclude Include="source\SpriteNode.hpp" />
     <ClInclude Include="source\StringHelpers.hpp" />
+    <ClInclude Include="Source\Weapon.h" />
     <ClInclude Include="source\World.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

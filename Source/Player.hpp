@@ -9,11 +9,9 @@
 
 class CommandQueue;
 
-class Player
-{
+class Player{
 	public:
-		enum Action
-		{
+		enum Action{
 			MoveLeft,
 			MoveRight,
 			MoveUp,
@@ -26,18 +24,18 @@ class Player
 
 
 	public:
-								Player();
+		Player();
 
-		void					handleEvent(const sf::Event& event, CommandQueue& commands);
-		void					handleRealtimeInput(CommandQueue& commands);
+		void handleEvent(const sf::Event& event, CommandQueue& commands);
+		void handleRealtimeInput(CommandQueue& commands);
 
-		void					assignKey(Action action, sf::Keyboard::Key key);
-		sf::Keyboard::Key		getAssignedKey(Action action) const;
+		void assignKey(Action action, sf::Keyboard::Key key);
+		sf::Keyboard::Key getAssignedKey(Action action) const;
 
 
 	private:
-		void					initializeActions();
-		static bool				isRealtimeAction(Action action);
+		void initializeActions();
+		static bool isRealtimeAction(Action action);
 
 
 	private:

@@ -1,7 +1,6 @@
 #include "Entity.hpp"
 
-Entity::Entity(int hp)
-	: mVelocity()
+Entity::Entity(int hp) : mVelocity()
 	, mHP(hp){
 }
 

@@ -8,23 +8,19 @@
 #include <algorithm>
 
 
-struct CharacterMover
-{
+struct CharacterMover{
 	CharacterMover(float vx, float vy)
-	: velocity(vx, vy)
-	{
+	: velocity(vx, vy){
 	}
 
-	void operator() (Character& character, sf::Time) const
-	{
+	void operator() (Character& character, sf::Time) const{
 		character.accelerate(velocity);
 	}
 
 	sf::Vector2f velocity;
 };
 
-Player::Player()
-{
+Player::Player(){
 	// Set initial key bindings
 	mKeyBinding[sf::Keyboard::Up] = MoveUp;
 	mKeyBinding[sf::Keyboard::Down] = MoveDown;
@@ -42,10 +38,8 @@ Player::Player()
 		pair.second.category = Category::PlayerCharacter;
 }
 
-void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
-{
-	if (event.type == sf::Event::KeyPressed)
-	{
+void Player::handleEvent(const sf::Event& event, CommandQueue& commands){
+	if (event.type == sf::Event::KeyPressed){
 		// Check if pressed key appears in key binding, trigger command if so
 		auto found = mKeyBinding.find(event.key.code);
 		if (found != mKeyBinding.end() && !isRealtimeAction(found->second))
@@ -53,22 +47,18 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 	}
 }
 
-void Player::handleRealtimeInput(CommandQueue& commands)
-{
+void Player::handleRealtimeInput(CommandQueue& commands){
 	// Traverse all assigned keys and check if they are pressed
-	FOREACH(auto pair, mKeyBinding)
-	{
+	FOREACH(auto pair, mKeyBinding)	{
 		// If key is pressed, lookup action and trigger corresponding command
 		if (sf::Keyboard::isKeyPressed(pair.first) && isRealtimeAction(pair.second))
 			commands.push(mActionBinding[pair.second]);
 	}
 }
 
-void Player::assignKey(Action action, sf::Keyboard::Key key)
-{
+void Player::assignKey(Action action, sf::Keyboard::Key key){
 	// Remove all keys that already map to action
-	for (auto itr = mKeyBinding.begin(); itr != mKeyBinding.end(); )
-	{
+	for (auto itr = mKeyBinding.begin(); itr != mKeyBinding.end(); )	{
 		if (itr->second == action)
 			mKeyBinding.erase(itr++);
 		else
@@ -79,10 +69,8 @@ void Player::assignKey(Action action, sf::Keyboard::Key key)
 	mKeyBinding[key] = action;
 }
 
-sf::Keyboard::Key Player::getAssignedKey(Action action) const
-{
-	FOREACH(auto pair, mKeyBinding)
-	{
+sf::Keyboard::Key Player::getAssignedKey(Action action) const{
+	FOREACH(auto pair, mKeyBinding)	{
 		if (pair.second == action)
 			return pair.first;
 	}
@@ -90,8 +78,7 @@ sf::Keyboard::Key Player::getAssignedKey(Action action) const
 	return sf::Keyboard::Unknown;
 }
 
-void Player::initializeActions()
-{
+void Player::initializeActions(){
 	const float playerSpeed = 100.f;
 
 	mActionBinding[MoveUp].action = derivedAction<Character>(CharacterMover(0.f, -playerSpeed));
@@ -101,10 +88,8 @@ void Player::initializeActions()
 	//mActionBinding[Shoot].action = derivedAction<Character>(ShootAttack());
 }
 
-bool Player::isRealtimeAction(Action action)
-{
-	switch (action)
-	{
+bool Player::isRealtimeAction(Action action){
+	switch (action)	{
 		case MoveLeft:
 		case MoveRight:
 		case MoveDown:

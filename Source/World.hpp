@@ -17,48 +17,43 @@
 
 
 // Forward declaration
-namespace sf
-{
+namespace sf{
 	class RenderWindow;
 }
 
-class World : private sf::NonCopyable
-{
+class World : private sf::NonCopyable{
 	public:
-		explicit							World(sf::RenderWindow& window);
-		void								update(sf::Time dt);
-		void								draw();
+		explicit World(sf::RenderWindow& window);
+		void update(sf::Time dt);
+		void draw();
 		
-		CommandQueue&						getCommandQueue();
+		CommandQueue& getCommandQueue();
 
 
 	private:
-		void								loadTextures();
-		void								buildScene();
-		void								adaptPlayerPosition();
-		void								adaptPlayerVelocity();
-		void								addEnemies();
-		void								addEnemy(Character::Type type, float relX, float relY);
+		void loadTextures();
+		void buildScene();
+		void adaptPlayerPosition();
+		void adaptPlayerVelocity();
+		void addEnemies();
+		void addEnemy(Character::Type type, float relX, float relY);
 		void spawnEnemies();
 		sf::FloatRect getViewBounds() const;
 		sf::FloatRect						getEnemySpawnBounds() const;
 
 
 	private:
-		enum Layer
-		{
+		enum Layer{
 			Background,
 			Air,
 			LayerCount
 		};
 
-		struct SpawnPoint
-		{
+		struct SpawnPoint{
 			SpawnPoint(Character::Type type, float x, float y)
 				: type(type)
 				, x(x)
-				, y(y)
-			{
+				, y(y){
 			}
 
 			Character::Type type;

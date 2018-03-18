@@ -69,6 +69,8 @@ void World::loadTextures()
 	mTextures.load(Textures::EnemyZ, "Media/Textures/Zubat.png");
 	mTextures.load(Textures::EnemyD, "Media/Textures/Dragonite.png");
 	mTextures.load(Textures::Bomb, "Media/Textures/Electrode.png");
+	mTextures.load(Textures::BulletZ, "Media/Textures/BulletZ.png");
+	mTextures.load(Textures::BulletD, "Media/Textures/BulletD.png");
 }
 
 
@@ -100,11 +102,9 @@ void World::adaptPlayerVelocity()
 }
 
 
-void World::buildScene()
-{
+void World::buildScene(){
 	// Initialize the different layers
-	for (std::size_t i = 0; i < LayerCount; ++i)
-	{
+	for (std::size_t i = 0; i < LayerCount; ++i)	{
 		Category::Type category = (i == Air) ? Category::Scene : Category::None;
 
 		SceneNode::Ptr layer(new SceneNode(category));
@@ -132,47 +132,43 @@ void World::buildScene()
 	addEnemies();
 }
 //add multiple enemies to the world
-void World::addEnemies()
-{
+void World::addEnemies(){
 	// Add enemies to the spawn point container
 	addEnemy(Character::EnemyZ, 0.f, 300.f);
 	addEnemy(Character::EnemyZ, +50.f, 500.f);
-	addEnemy(Character::EnemyZ, +100.f, 800.f);
-	addEnemy(Character::EnemyD, +80.f, 1000.f);
+	addEnemy(Character::EnemyZ, -80.f, 800.f);
+	addEnemy(Character::EnemyD, +100.f, 1000.f);
 	addEnemy(Character::EnemyZ, -70.f, 1200.f);
-	addEnemy(Character::EnemyZ, +60.f, 1200.f);
-	addEnemy(Character::EnemyD, 70.f, 1400.f);
-	addEnemy(Character::EnemyZ, 70.f, 1550.f);
+	addEnemy(Character::EnemyZ, +120.f, 1200.f);
+	addEnemy(Character::EnemyD, +110.f, 1400.f);
+	addEnemy(Character::EnemyZ, -40.f, 1550.f);
 	addEnemy(Character::EnemyD, +100.f, 1600.f);
-	addEnemy(Character::EnemyD, -100.f, 1750.f);
-	addEnemy(Character::EnemyZ, -90.f, 1700.f);
-	addEnemy(Character::EnemyD, -45.f, 1800.f);
-	addEnemy(Character::EnemyZ, +40.f, 1850.f);
-	addEnemy(Character::EnemyZ, 0.f, 1850.f);
+	addEnemy(Character::EnemyD, -10.f, 1750.f);
+	addEnemy(Character::EnemyZ, -90.f, 1800.f);
+	addEnemy(Character::EnemyD, -45.f, 1900.f);
+	addEnemy(Character::EnemyZ, +40.f, 2050.f);
+	addEnemy(Character::EnemyZ, 0.f, 2050.f);
+	addEnemy(Character::EnemyZ, -200.f, 2050.f);
 	std::cout << "All Enemies created\n";
 
 	// Sort all enemies according to their y value, such that lower enemies are checked first for spawning
-	std::sort(mEnemySpawnPoints.begin(), mEnemySpawnPoints.end(), [](SpawnPoint lhs, SpawnPoint rhs)
-	{
+	std::sort(mEnemySpawnPoints.begin(), mEnemySpawnPoints.end(), [](SpawnPoint lhs, SpawnPoint rhs)	{
 		std::cout << "All Enemies Sorted";
 		return lhs.y < rhs.y;
 	});
 }
 
-void World::addEnemy(Character::Type type, float relX, float relY)
-{
+void World::addEnemy(Character::Type type, float relX, float relY){
 	SpawnPoint spawn(type, mSpawnPosition.x + relX, mSpawnPosition.y - relY);
 	std::cout << "Spawning Enemy..";
 	mEnemySpawnPoints.push_back(spawn);
 }
 
 
-void World::spawnEnemies()
-{
+void World::spawnEnemies(){
 	// Spawns enemy pokemon
 	while (!mEnemySpawnPoints.empty()
-		&& mEnemySpawnPoints.back().y > getEnemySpawnBounds().top)
-	{
+		&& mEnemySpawnPoints.back().y > getEnemySpawnBounds().top)	{
 		SpawnPoint spawn = mEnemySpawnPoints.back();
 
 		std::unique_ptr<Character> enemy(new Character(spawn.type, mTextures));
@@ -185,8 +181,8 @@ void World::spawnEnemies()
 		std::cout << "new instance of enemy created\n";
 	}
 }
-sf::FloatRect World::getEnemySpawnBounds() const
-{
+
+sf::FloatRect World::getEnemySpawnBounds() const{
 	// Return view bounds + some area at top, where enemies spawn
 	sf::FloatRect bounds = getViewBounds();
 	bounds.top -= 3000.f;
@@ -195,8 +191,7 @@ sf::FloatRect World::getEnemySpawnBounds() const
 	return bounds;
 }
 
-sf::FloatRect World::getViewBounds() const
-{
+sf::FloatRect World::getViewBounds() const{
 	return sf::FloatRect(mWorldView.getCenter() - mWorldView.getSize() / 2.f, mWorldView.getSize());
 }
 

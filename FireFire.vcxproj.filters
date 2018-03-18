@@ -45,7 +45,10 @@
     <ClCompile Include="source\Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataTables.cpp">
+    <ClCompile Include="Source\DataTables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,7 +103,10 @@
     <ClInclude Include="source\Character.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DataTables.h">
+    <ClInclude Include="Source\DataTables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

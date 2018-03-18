@@ -8,21 +8,17 @@
 #include <cmath>
 
 
-SceneNode::SceneNode(Category::Type category)
-	: mChildren()
+SceneNode::SceneNode(Category::Type category): mChildren()
 	, mParent(nullptr)
-	, mDefaultCategory(category)
-{
+	, mDefaultCategory(category){
 }
 
-void SceneNode::attachChild(Ptr child)
-{
+void SceneNode::attachChild(Ptr child){
 	child->mParent = this;
 	mChildren.push_back(std::move(child));
 }
 
-SceneNode::Ptr SceneNode::detachChild(const SceneNode& node)
-{
+SceneNode::Ptr SceneNode::detachChild(const SceneNode& node){
 	auto found = std::find_if(mChildren.begin(), mChildren.end(), [&] (Ptr& p) { return p.get() == &node; });
 	assert(found != mChildren.end());
 
@@ -32,25 +28,21 @@ SceneNode::Ptr SceneNode::detachChild(const SceneNode& node)
 	return result;
 }
 
-void SceneNode::update(sf::Time dt, CommandQueue& commands)
-{
+void SceneNode::update(sf::Time dt, CommandQueue& commands){
 	updateCurrent(dt, commands);
 	updateChildren(dt, commands);
 }
 
-void SceneNode::updateCurrent(sf::Time, CommandQueue&)
-{
+void SceneNode::updateCurrent(sf::Time, CommandQueue&){
 	// Do nothing by default
 }
 
-void SceneNode::updateChildren(sf::Time dt, CommandQueue& commands)
-{
+void SceneNode::updateChildren(sf::Time dt, CommandQueue& commands){
 	FOREACH(Ptr& child, mChildren)
 		child->update(dt, commands);
 }
 
-void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
+void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 	// Apply transform of current node
 	states.transform *= getTransform();
 
@@ -59,24 +51,20 @@ void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	drawChildren(target, states);
 }
 
-void SceneNode::drawCurrent(sf::RenderTarget&, sf::RenderStates) const
-{
+void SceneNode::drawCurrent(sf::RenderTarget&, sf::RenderStates) const{
 	// Do nothing by default
 }
 
-void SceneNode::drawChildren(sf::RenderTarget& target, sf::RenderStates states) const
-{
+void SceneNode::drawChildren(sf::RenderTarget& target, sf::RenderStates states) const{
 	FOREACH(const Ptr& child, mChildren)
 		child->draw(target, states);
 }
 
-sf::Vector2f SceneNode::getWorldPosition() const
-{
+sf::Vector2f SceneNode::getWorldPosition() const{
 	return getWorldTransform() * sf::Vector2f();
 }
 
-sf::Transform SceneNode::getWorldTransform() const
-{
+sf::Transform SceneNode::getWorldTransform() const{
 	sf::Transform transform = sf::Transform::Identity;
 
 	for (const SceneNode* node = this; node != nullptr; node = node->mParent)
@@ -85,8 +73,7 @@ sf::Transform SceneNode::getWorldTransform() const
 	return transform;
 }
 
-void SceneNode::onCommand(const Command& command, sf::Time dt)
-{
+void SceneNode::onCommand(const Command& command, sf::Time dt){
 	// Command current node, if category matches
 	if (command.category & getCategory())
 		command.action(*this, dt);
@@ -96,13 +83,11 @@ void SceneNode::onCommand(const Command& command, sf::Time dt)
 		child->onCommand(command, dt);
 }
 
-unsigned int SceneNode::getCategory() const
-{
+unsigned int SceneNode::getCategory() const{
 	return Category::Scene;
 }
 
-void SceneNode::removeWrecks()
-{
+void SceneNode::removeWrecks(){
 	// Remove all children which request so
 	auto wreckfieldBegin = std::remove_if(mChildren.begin(), mChildren.end(), std::mem_fn(&SceneNode::isMarkedForRemoval));
 	mChildren.erase(wreckfieldBegin, mChildren.end());
@@ -111,23 +96,19 @@ void SceneNode::removeWrecks()
 	std::for_each(mChildren.begin(), mChildren.end(), std::mem_fn(&SceneNode::removeWrecks));
 }
 
-bool SceneNode::isMarkedForRemoval() const
-{
+bool SceneNode::isMarkedForRemoval() const{
 	// By default, remove node if entity is destroyed
 	return isDestroyed();
 }
 
-bool SceneNode::isDestroyed() const
-{
+bool SceneNode::isDestroyed() const{
 	// By default, scene node needn't be removed
 	return false;
 }
-float length(sf::Vector2f vector)
-{
+float length(sf::Vector2f vector){
 	return std::sqrt(vector.x * vector.x + vector.y * vector.y);
 }
-float distance(const SceneNode& lhs, const SceneNode& rhs)
-{
+float distance(const SceneNode& lhs, const SceneNode& rhs){
 	return length(lhs.getWorldPosition() - rhs.getWorldPosition());
 }
 

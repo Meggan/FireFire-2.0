@@ -7,10 +7,8 @@ namespace sf
 	class Texture;
 }
 
-namespace Textures
-{
-	enum ID
-	{
+namespace Textures{
+	enum ID{
 		PlayerUp,
 		Player,
 		PlayerLeft,
@@ -20,6 +18,10 @@ namespace Textures
 		Background,
 		Ball,
 		Bomb,
+		BulletZ,
+		BulletD,
+		TextureCount
+
 	};
 }
 
