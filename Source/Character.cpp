@@ -21,12 +21,12 @@ Character::Character(Type type, const TextureHolder& textures) : Entity(Table[ty
 , mIsFiring(false)
 , mFireRateLevel(1)
 , mFireCommand()
-, mSpreadLevel(1)
 
 {
 	sf::FloatRect bounds = mSprite.getLocalBounds();
 	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
+	//creating bullet node
 	mFireCommand.category = Category::Scene;
 	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time)
 	{
@@ -36,26 +36,12 @@ Character::Character(Type type, const TextureHolder& textures) : Entity(Table[ty
 
 void Character::updateCurrent(sf::Time dt, CommandQueue& commands){
 	
-	// Check if bullets or missiles are fired
+	// Check if ball or bomb are fired
 	checkBulletLaunch(dt, commands);
 
 	// Update enemy movement pattern; apply velocity
 	updateMovementPattern(dt);
 	Entity::updateCurrent(dt, commands);
-}
-
-Textures::ID toTextureID(Character::Type type){
-	switch (type)	{
-	case Character::Player:	
-		return Textures::Player;
-
-	case Character::EnemyZ:
-		return Textures::EnemyZ;
-
-	case Character::EnemyD:
-		return Textures::EnemyD;
-	}
-	return Textures::Player;
 }
 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -66,7 +52,7 @@ unsigned int Character::getCategory() const{
 		if (isAllied())
 			return Category::PlayerCharacter;
 		else
-			return Category::EnemyCharacterZ;
+			return Category::EnemyCharacter;
 	}
 
 
@@ -102,31 +88,39 @@ float Character::getMaxSpeed() const{
 
 void Character::shoot()
 {
+	//std::cout << "shoot() called..";
 	// Only characters with fire interval != 0 are able to fire
-	if (Table[mType].fireInterval != sf::Time::Zero) 
+	if (Table[mType].fireInterval != sf::Time::Zero) {
 		mIsFiring = true;
+		std::cout << "mIsFiring is set to True..";
+	}
 }
 
 bool Character::isAllied() const
 {
+	//std::cout << "Returning Player mType..";
 	return mType == Player;
 }
 
 void Character::checkBulletLaunch(sf::Time dt, CommandQueue& commands)
 {
-	if (!isAllied())
+	//std::cout << "checking bullet launch..";
+	//lets enemies fire all the time
+	if (!isAllied()) {
 		shoot();
-
+	}
 	// Check for automatic gunfire, allow only in intervals
 	if (mIsFiring && mFireCountdown <= sf::Time::Zero)
 	{
 		// Interval expired: We can fire a new bullet
+		std::cout << "pushing mFireCommand..\n";
 		commands.push(mFireCommand);
 		mFireCountdown += Table[mType].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
 	}
 	else if (mFireCountdown > sf::Time::Zero)
 	{
+		std::cout << "mFireCountdown is > Zero....";
 		// Interval not expired: Decrease it further
 		mFireCountdown -= dt;
 		mIsFiring = false;
@@ -135,14 +129,17 @@ void Character::checkBulletLaunch(sf::Time dt, CommandQueue& commands)
 
 void Character::createBullets(SceneNode& node, const TextureHolder& textures) const
 {
-	Weapon::Type type = isAllied() ? Weapon::PlayerBullet : Weapon::EnemyBulletZ;
+	//if player shooting, do this, else it's an enemy projectile
+	Weapon::Type type = isAllied() ? Weapon::PlayerBullet : Weapon::EnemyProjectile;
 		createProjectile(node, type, 0.0f, 0.5f, textures);
+		std::cout << "Bullet created...";
 
 }
 void Character::createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const
 {
+	std::cout << "createProjectile Called...";
 	std::unique_ptr<Weapon> projectile(new Weapon(type, textures));
-
+	
 	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
 	sf::Vector2f velocity(0, projectile->getMaxSpeed());
 
@@ -150,4 +147,9 @@ void Character::createProjectile(SceneNode& node, Weapon::Type type, float xOffs
 	projectile->setPosition(getWorldPosition() + offset * sign);
 	projectile->setVelocity(velocity * sign);
 	node.attachChild(std::move(projectile));
+	std::cout << "I should be shooting now...";
 }
+
+void shootBullet(SceneNode& node, Weapon::Type type, TextureHolder&, float posX, float posY) {
+}
+	;

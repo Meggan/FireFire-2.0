@@ -11,11 +11,13 @@
 class Character : public Entity
 {
 	public:
-		enum Type{
+		enum Type {
 			Player,
 			EnemyZ,
 			EnemyD,
 			TypeCount,
+
+			Enemy = EnemyZ | EnemyD,
 		};
 
 
@@ -33,6 +35,7 @@ class Character : public Entity
 		 void checkBulletLaunch(sf::Time dt, CommandQueue& commands);
 		 void createBullets(SceneNode& node, const TextureHolder& textures) const;
 		 void createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const;
+		 //void shootBullet();
 
 	private:
 		Type mType;
@@ -45,6 +48,6 @@ class Character : public Entity
 		sf::Time mFireCountdown;
 		Command mFireCommand;
 		int mFireRateLevel;
-		int mSpreadLevel;
+		//int mSpreadLevel;
 };
 

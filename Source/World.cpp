@@ -1,5 +1,4 @@
 #include "World.hpp"
-
 #include "Foreach.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <iostream>
@@ -131,6 +130,7 @@ void World::buildScene(){
 	//add enemies to the scene
 	addEnemies();
 }
+
 //add multiple enemies to the world
 void World::addEnemies(){
 	// Add enemies to the spawn point container

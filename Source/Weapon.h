@@ -12,7 +12,10 @@ public:
 		EnemyBulletZ,
 		EnemyBulletD,
 		PlayerBomb,
-		TypeCount
+		TypeCount,
+
+		PlayerProjectile = PlayerBullet | PlayerBomb,
+		EnemyProjectile = EnemyBulletD | EnemyBulletZ,
 	};
 
 
