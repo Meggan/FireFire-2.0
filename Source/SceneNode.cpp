@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 
 SceneNode::SceneNode(Category::Type category): mChildren()
@@ -112,3 +113,31 @@ float distance(const SceneNode& lhs, const SceneNode& rhs){
 	return length(lhs.getWorldPosition() - rhs.getWorldPosition());
 }
 
+sf::FloatRect SceneNode::getBoundingRect() const{
+	return sf::FloatRect();
+}
+
+
+bool collision(const SceneNode& lhs, const SceneNode& rhs){
+	return lhs.getBoundingRect().intersects(rhs.getBoundingRect());
+}
+
+
+//checkNodeCollision to compare every scene node with each other to see if a collision occurs
+void SceneNode::checkNodeCollision(SceneNode& node, std::set<Pair>& collisionPairs){
+	//std::cout << "checkingNodeCollision";
+	if (this != &node && collision(*this, node) && !isDestroyed() && !node.isDestroyed())
+		collisionPairs.insert(std::minmax(this, &node));
+
+	FOREACH(Ptr& child, mChildren)
+		child->checkNodeCollision(node, collisionPairs);
+}
+
+//checks scene recursively for all children of *this
+//scene graph is evaluated here
+void SceneNode::checkSceneCollision(SceneNode& sceneGraph, std::set<Pair>& collisionPairs) {
+	checkNodeCollision(sceneGraph, collisionPairs);
+
+	FOREACH(Ptr& child, sceneGraph.mChildren)
+		checkSceneCollision(*child, collisionPairs);
+}

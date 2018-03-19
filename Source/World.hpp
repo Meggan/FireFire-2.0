@@ -39,7 +39,8 @@ class World : private sf::NonCopyable{
 		void addEnemy(Character::Type type, float relX, float relY);
 		void spawnEnemies();
 		sf::FloatRect getViewBounds() const;
-		sf::FloatRect						getEnemySpawnBounds() const;
+		sf::FloatRect getEnemySpawnBounds() const;
+		void handleCollisions();
 
 
 	private:

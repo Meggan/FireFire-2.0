@@ -10,7 +10,7 @@ std::vector<CharacterData> initializeCharacterData(){
 	std::vector<CharacterData> data(Character::TypeCount);
 
 	data[Character::Player].hp = 100;
-	data[Character::Player].speed = 200.f;
+	data[Character::Player].speed = 300.f;
 	data[Character::Player].fireInterval = sf::seconds(1);
 	data[Character::Player].texture = Textures::Player;
 

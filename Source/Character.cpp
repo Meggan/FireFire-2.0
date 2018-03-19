@@ -28,8 +28,7 @@ Character::Character(Type type, const TextureHolder& textures) : Entity(Table[ty
 
 	//creating bullet node
 	mFireCommand.category = Category::Scene;
-	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time)
-	{
+	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time){
 		createBullets(node, textures);
 	};
 }
@@ -60,7 +59,7 @@ unsigned int Character::getCategory() const{
 void Character::updateMovementPattern(sf::Time dt){
 	
 	const std::vector<Direction>& directions = Table[mType].direction;
-	if (!directions.empty())	{
+	if (!directions.empty()){
 		// change directions when current movement is complete
 		if (mTravelledDistance > directions[mDirectionIndex].distance){
 			mDirectionIndex = (mDirectionIndex + 1) % directions.size();
@@ -86,70 +85,66 @@ float Character::getMaxSpeed() const{
 	return Table[mType].speed;
 }
 
-void Character::shoot()
-{
+void Character::shoot(){
 	//std::cout << "shoot() called..";
 	// Only characters with fire interval != 0 are able to fire
 	if (Table[mType].fireInterval != sf::Time::Zero) {
 		mIsFiring = true;
-		std::cout << "mIsFiring is set to True..";
+		//std::cout << "mIsFiring is set to True..";
 	}
 }
 
-bool Character::isAllied() const
-{
+bool Character::isAllied() const{
 	//std::cout << "Returning Player mType..";
 	return mType == Player;
 }
 
-void Character::checkBulletLaunch(sf::Time dt, CommandQueue& commands)
-{
+void Character::checkBulletLaunch(sf::Time dt, CommandQueue& commands){
 	//std::cout << "checking bullet launch..";
 	//lets enemies fire all the time
 	if (!isAllied()) {
 		shoot();
 	}
 	// Check for automatic gunfire, allow only in intervals
-	if (mIsFiring && mFireCountdown <= sf::Time::Zero)
-	{
-		// Interval expired: We can fire a new bullet
-		std::cout << "pushing mFireCommand..\n";
+	if (mIsFiring && mFireCountdown <= sf::Time::Zero)	{
+		//shoot bullet if cooldown is down
+		//std::cout << "pushing mFireCommand..\n";
 		commands.push(mFireCommand);
 		mFireCountdown += Table[mType].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
 	}
-	else if (mFireCountdown > sf::Time::Zero)
-	{
-		std::cout << "mFireCountdown is > Zero....";
-		// Interval not expired: Decrease it further
+	else if (mFireCountdown > sf::Time::Zero)	{
+		//std::cout << "mFireCountdown is > Zero....";
+		//decrease the countdown
 		mFireCountdown -= dt;
 		mIsFiring = false;
 	}
 }
-
-void Character::createBullets(SceneNode& node, const TextureHolder& textures) const
-{
-	//if player shooting, do this, else it's an enemy projectile
+//Creates bullet by calling createProjectile, which handles the actual shooting
+void Character::createBullets(SceneNode& node, const TextureHolder& textures) const{
+	//if player shooting, it's a pokeball do this, else it's an enemy projectile
 	Weapon::Type type = isAllied() ? Weapon::PlayerBullet : Weapon::EnemyProjectile;
 		createProjectile(node, type, 0.0f, 0.5f, textures);
-		std::cout << "Bullet created...";
-
+		//std::cout << "Bullet created...";
 }
-void Character::createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const
-{
-	std::cout << "createProjectile Called...";
-	std::unique_ptr<Weapon> projectile(new Weapon(type, textures));
-	
-	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
-	sf::Vector2f velocity(0, projectile->getMaxSpeed());
 
+void Character::createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const{
+	//std::cout << "createProjectile Called...";
+	//creating a bullet
+	std::unique_ptr<Weapon> projectile(new Weapon(type, textures));
+	//set the bullet where the player is..
+	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
+	//velocity of the projectile is max speed..
+	sf::Vector2f velocity(0, projectile->getMaxSpeed());
 	float sign = isAllied() ? -1.f : +1.f;
 	projectile->setPosition(getWorldPosition() + offset * sign);
 	projectile->setVelocity(velocity * sign);
+	//move the bullet
 	node.attachChild(std::move(projectile));
-	std::cout << "I should be shooting now...";
+	//std::cout << "I should be shooting now...";
 }
 
-void shootBullet(SceneNode& node, Weapon::Type type, TextureHolder&, float posX, float posY) {
+//creating a bounding rectangle for the characters
+sf::FloatRect Character::getBoundingRect() const{
+	return getWorldTransform().transformRect(mSprite.getGlobalBounds());
 }
-	;

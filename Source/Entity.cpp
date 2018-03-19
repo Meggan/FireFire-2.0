@@ -34,3 +34,20 @@ bool Entity::isDestroyed() const
 {
 	return mHP <= 0;
 }
+
+int Entity::getHP() const
+{
+	return mHP;
+}
+
+void Entity::dmg(int points)
+{
+	assert(points > 0);
+
+	mHP -= points;
+}
+
+void Entity::destroy()
+{
+	mHP = 0;
+}

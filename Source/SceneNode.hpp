@@ -37,6 +37,9 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 		virtual bool isMarkedForRemoval() const;
 		virtual bool isDestroyed() const;
 		float length(sf::Vector2f vector);
+		void checkSceneCollision(SceneNode& sceneGraph, std::set<Pair>& collisionPairs);
+		void checkNodeCollision(SceneNode& node, std::set<Pair>& collisionPairs);
+		virtual sf::FloatRect getBoundingRect() const;
 
 
 	private:
@@ -52,3 +55,6 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 		SceneNode* mParent;
 		Category::Type mDefaultCategory;
 };
+
+bool collision(const SceneNode& lhs, const SceneNode& rhs);
+float distance(const SceneNode& lhs, const SceneNode& rhs);

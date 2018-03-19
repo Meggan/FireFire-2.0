@@ -17,6 +17,8 @@ namespace Category{
 		Character = PlayerCharacter | EnemyCharacterD | EnemyBulletZ,
 		EnemyCharacter = EnemyCharacterD | EnemyBulletZ,
 		Weapon = PlayerBullet | EnemyBulletD | EnemyBulletZ | PlayerBomb,
+		PlayerWeapon = PlayerBullet | PlayerBomb,
+		EnemyWeapon = EnemyCharacterD | EnemyBulletZ,
 	};
 }
 

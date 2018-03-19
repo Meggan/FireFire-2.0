@@ -16,10 +16,9 @@ class Entity : public SceneNode{
 	//health for Entities
 	public:
 		explicit Entity(int hp);
-		//void heal(int hp);
-		//void damage(int dmg);
-		//void destroy();
-		//int getHP() const;
+		void dmg(int dmg);
+		void destroy();
+		int getHP() const;
 		bool isDestroyed() const;
 
 	protected:

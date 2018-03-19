@@ -28,6 +28,7 @@ class Character : public Entity
 		float toRadian(float degree);
 		void shoot();
 		bool isAllied() const;
+		virtual sf::FloatRect getBoundingRect() const;
 
 
 	private:
