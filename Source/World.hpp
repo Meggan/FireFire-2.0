@@ -1,5 +1,4 @@
 #pragma once
-
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
@@ -7,16 +6,12 @@
 #include "Character.hpp"
 #include "CommandQueue.hpp"
 #include "Command.hpp"
-
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/Texture.hpp>
-
 #include <array>
 #include <queue>
 
-
-// Forward declaration
 namespace sf{
 	class RenderWindow;
 }
@@ -44,8 +39,6 @@ class World : private sf::NonCopyable{
 		void handleCollisions();
 		void destroyActorsOutsideView();
 
-
-	private:
 		enum Layer{
 			Background,
 			Air,
@@ -64,7 +57,6 @@ class World : private sf::NonCopyable{
 			float y;
 		};
 
-	private:
 		sf::RenderWindow& mWindow;
 		sf::View mWorldView;
 		TextureHolder mTextures;

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Actor.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "Weapon.h"
@@ -23,32 +22,35 @@ class Character : public Actor
 
 	public:
 		Character(Type type, const TextureHolder& textures);
-		virtual unsigned int	getCategory() const;
+
+		void shoot();
+		virtual unsigned int getCategory() const;
 		float getMaxSpeed() const;
 		float toRadian(float degree);
-		void shoot();
 		bool isAllied() const;
+
 		virtual sf::FloatRect getBoundingRect() const;
+
 
 
 	private:
 		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-		 void checkBulletLaunch(sf::Time dt, CommandQueue& commands);
-		 void createBullets(SceneNode& node, const TextureHolder& textures) const;
-		 void createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const;
-		 //void shootBullet();
-
-	private:
-		Type mType;
-		sf::Sprite mSprite;
-		float mTravelledDistance;
-		std::size_t mDirectionIndex;
+		void checkBulletLaunch(sf::Time dt, CommandQueue& commands);
+		void createBullets(SceneNode& node, const TextureHolder& textures) const;
+		void createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const;
 		void updateMovementPattern(sf::Time dt);
 		void updateCurrent(sf::Time dt, CommandQueue& commands);
-		bool mIsFiring;
-		sf::Time mFireCountdown;
-		Command mFireCommand;
+
+
 		int mFireRateLevel;
-		//int mSpreadLevel;
+		float mTravelledDistance;
+		bool mIsFiring;
+
+		Type mType;
+		Command mFireCommand;
+		sf::Time mFireCountdown;
+		std::size_t mDirectionIndex;
+		sf::Sprite mSprite;
+
 };
 

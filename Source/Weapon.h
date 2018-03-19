@@ -6,8 +6,7 @@
 class Weapon : public Actor
 {
 public:
-	enum Type
-	{
+	enum Type	{
 		PlayerBullet,
 		EnemyBulletZ,
 		EnemyBulletD,
@@ -18,16 +17,13 @@ public:
 		EnemyProjectile = EnemyBulletD | EnemyBulletZ,
 	};
 
-
-public:
 	Weapon(Type type, const TextureHolder& textures);
 
 	virtual unsigned int getCategory() const;
 	virtual sf::FloatRect getBoundingRect() const;
 	float getMaxSpeed() const;
 	int getDamage() const;
-	// Call setOrigin() with the center of the object
-	void			centerOrigin(sf::Sprite& sprite);
+	void centerOrigin(sf::Sprite& sprite);
 
 
 private:

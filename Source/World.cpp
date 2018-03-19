@@ -37,6 +37,9 @@ void World::update(sf::Time dt)
 		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
 	adaptPlayerVelocity();
 
+	//destroy actors outside of the view to prevent it from lagging
+	destroyActorsOutsideView();
+
 	//handle collisions
 	handleCollisions();
 
@@ -181,8 +184,8 @@ void World::spawnEnemies(){
 sf::FloatRect World::getEnemySpawnBounds() const{
 	// Return view bounds + some area at top, where enemies spawn
 	sf::FloatRect bounds = getViewBounds();
-	bounds.top -= 100;
-	bounds.height += 100;
+	bounds.top -= 5;
+	bounds.height += 5;
 
 	return bounds;
 }

@@ -27,8 +27,8 @@ Player::Player(){
 	mKeyBinding[sf::Keyboard::Left] = MoveLeft;
 	mKeyBinding[sf::Keyboard::Right] = MoveRight;
 	mKeyBinding[sf::Keyboard::Space] = Shoot;
-	mKeyBinding[sf::Keyboard::PageUp] = WeaponUp;
-	mKeyBinding[sf::Keyboard::PageDown] = WeaponDown;
+	mKeyBinding[sf::Keyboard::PageUp] = WeaponSwitch;
+	mKeyBinding[sf::Keyboard::PageDown] = WeaponSwitch;
 
 	// Set initial action bindings
 	initializeActions();	
@@ -97,6 +97,7 @@ bool Player::isRealtimeAction(Action action){
 		case MoveDown:
 		case MoveUp:
 		case Shoot:
+		case WeaponSwitch:
 			return true;
 
 		default:

@@ -1,9 +1,6 @@
 #pragma once
-
 #include "Category.hpp"
-
 #include <SFML/System/Time.hpp>
-
 #include <functional>
 #include <cassert>
 
@@ -12,8 +9,7 @@ class SceneNode;
 
 struct Command{
 	Command();
-
-	std::function<void(SceneNode&, sf::Time)>	action;
+	std::function<void(SceneNode&, sf::Time)> action;
 	unsigned int category;
 };
 

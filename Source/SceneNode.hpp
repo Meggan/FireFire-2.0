@@ -1,7 +1,5 @@
 #pragma once
-
 #include "Category.hpp"
-
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/Transformable.hpp>
@@ -16,21 +14,14 @@ class CommandQueue;
 
 class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable{
 	public:
+		explicit SceneNode(Category::Type category = Category::None);
 		typedef std::unique_ptr<SceneNode> Ptr;
 		typedef std::pair<SceneNode*, SceneNode*> Pair;
-
-
-	public:
-		explicit SceneNode(Category::Type category = Category::None);
-
 		void attachChild(Ptr child);
 		Ptr detachChild(const SceneNode& node);
-		
 		void update(sf::Time dt, CommandQueue& commands);
-
 		sf::Vector2f getWorldPosition() const;
 		sf::Transform getWorldTransform() const;
-
 		void onCommand(const Command& command, sf::Time dt);
 		virtual unsigned  	getCategory() const;
 		void removeWrecks();
@@ -49,8 +40,6 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 		void drawChildren(sf::RenderTarget& target, sf::RenderStates states) const;
-
-	private:
 		std::vector<Ptr> mChildren;
 		SceneNode* mParent;
 		Category::Type mDefaultCategory;

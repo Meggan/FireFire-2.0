@@ -20,9 +20,7 @@ Character::Character(Type type, const TextureHolder& textures) : Actor(Table[typ
 , mFireCountdown(sf::Time::Zero)
 , mIsFiring(false)
 , mFireRateLevel(1)
-, mFireCommand()
-
-{
+, mFireCommand(){
 	sf::FloatRect bounds = mSprite.getLocalBounds();
 	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
@@ -33,6 +31,7 @@ Character::Character(Type type, const TextureHolder& textures) : Actor(Table[typ
 	};
 }
 
+//updateCurrent for character
 void Character::updateCurrent(sf::Time dt, CommandQueue& commands){
 	
 	// Check if ball or bomb are fired
@@ -43,10 +42,12 @@ void Character::updateCurrent(sf::Time dt, CommandQueue& commands){
 	Actor::updateCurrent(dt, commands);
 }
 
+//drawCurrent for character
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const{
 	target.draw(mSprite, states);
 }
 
+//get category of character
 unsigned int Character::getCategory() const{
 		if (isAllied())
 			return Category::PlayerCharacter;
@@ -66,25 +67,28 @@ void Character::updateMovementPattern(sf::Time dt){
 			mTravelledDistance = 0.f;
 		}
 
-		// Compute velocity from direction
-		float radians = toRadian(directions[mDirectionIndex].angle + 90.f);
-		float vx = getMaxSpeed() * std::cos(radians);
-		float vy = getMaxSpeed() * std::sin(radians);
+		// calculate velocity from direction
+		float rad = toRadian(directions[mDirectionIndex].angle + 90.f);
+		float x = getMaxSpeed() * std::cos(rad);
+		float y = getMaxSpeed() * std::sin(rad);
 
-		setVelocity(vx, vy);
+		setVelocity(x, y);
 
 		mTravelledDistance += getMaxSpeed() * dt.asSeconds();
 	}
 }
 
+//to radians func for calculations
 float Character::toRadian(float degree){
 	return 3.141592653589793238462643383f / 180.f * degree;
 }
 
+//get max speed
 float Character::getMaxSpeed() const{
 	return Table[mType].speed;
 }
 
+//method to start shooting
 void Character::shoot(){
 	//std::cout << "shoot() called..";
 	// Only characters with fire interval != 0 are able to fire
@@ -98,7 +102,7 @@ bool Character::isAllied() const{
 	//std::cout << "Returning Player mType..";
 	return mType == Player;
 }
-
+//check if bullet launched
 void Character::checkBulletLaunch(sf::Time dt, CommandQueue& commands){
 	//std::cout << "checking bullet launch..";
 	//lets enemies fire all the time
@@ -106,20 +110,21 @@ void Character::checkBulletLaunch(sf::Time dt, CommandQueue& commands){
 		shoot();
 	}
 	// Check for automatic gunfire, allow only in intervals
-	if (mIsFiring && mFireCountdown <= sf::Time::Zero)	{
+	if (mIsFiring && mFireCountdown <= sf::Time::Zero){
 		//shoot bullet if cooldown is down
 		//std::cout << "pushing mFireCommand..\n";
 		commands.push(mFireCommand);
 		mFireCountdown += Table[mType].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
 	}
-	else if (mFireCountdown > sf::Time::Zero)	{
+	else if (mFireCountdown > sf::Time::Zero){
 		//std::cout << "mFireCountdown is > Zero....";
 		//decrease the countdown
 		mFireCountdown -= dt;
 		mIsFiring = false;
 	}
 }
+
 //Creates bullet by calling createProjectile, which handles the actual shooting
 void Character::createBullets(SceneNode& node, const TextureHolder& textures) const{
 	//if player shooting, it's a pokeball do this, else it's an enemy projectile
@@ -128,8 +133,10 @@ void Character::createBullets(SceneNode& node, const TextureHolder& textures) co
 		//std::cout << "Bullet created...";
 }
 
+//func to createprojectiles using nodes and info from createbullets etc
 void Character::createProjectile(SceneNode& node, Weapon::Type type, float xOffset, float yOffset, const TextureHolder& textures) const{
 	//std::cout << "createProjectile Called...";
+
 	//creating a bullet
 	std::unique_ptr<Weapon> projectile(new Weapon(type, textures));
 	//set the bullet where the player is..
@@ -144,7 +151,7 @@ void Character::createProjectile(SceneNode& node, Weapon::Type type, float xOffs
 	//std::cout << "I should be shooting now...";
 }
 
-//creating a bounding rectangle for the characters
+//creating a bounding rectangle for the characters for collision detection
 sf::FloatRect Character::getBoundingRect() const{
 	return getWorldTransform().transformRect(mSprite.getGlobalBounds());
 }

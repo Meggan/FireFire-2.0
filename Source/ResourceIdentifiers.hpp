@@ -1,12 +1,11 @@
 #pragma once
 
-
-// Forward declaration of SFML classes
 namespace sf
 {
 	class Texture;
 }
 
+//all textures for scenenodes
 namespace Textures{
 	enum ID{
 		PlayerUp,
@@ -25,9 +24,7 @@ namespace Textures{
 	};
 }
 
-// Forward declaration and a few type definitions
 template <typename Resource, typename Identifier>
 class ResourceHolder;
-
 typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
 

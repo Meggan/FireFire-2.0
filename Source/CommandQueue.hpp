@@ -1,7 +1,5 @@
 #pragma once
-
 #include "Command.hpp"
-
 #include <queue>
 
 
