@@ -9,7 +9,7 @@ std::vector<CharacterData> initializeCharacterData(){
 	//typecount is is the last in the enum..
 	std::vector<CharacterData> data(Character::TypeCount);
 
-	data[Character::Player].hp = 100;
+	data[Character::Player].hp = 200;
 	data[Character::Player].speed = 300.f;
 	data[Character::Player].fireInterval = sf::seconds(1);
 	data[Character::Player].texture = Textures::Player;

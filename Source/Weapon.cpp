@@ -11,7 +11,7 @@ namespace{
 }
 
 
-Weapon::Weapon(Type type, const TextureHolder& textures): Entity(1)
+Weapon::Weapon(Type type, const TextureHolder& textures): Actor(1)
 	, mType(type)
 	, mSprite(textures.get(Table[type].texture))
 	, mTargetDirection(){
@@ -19,7 +19,7 @@ Weapon::Weapon(Type type, const TextureHolder& textures): Entity(1)
 }
 
 void Weapon::updateCurrent(sf::Time dt, CommandQueue& commands){
-	Entity::updateCurrent(dt, commands);
+	Actor::updateCurrent(dt, commands);
 }
 
 void Weapon::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const{

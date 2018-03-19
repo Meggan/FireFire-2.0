@@ -26,6 +26,7 @@ class World : private sf::NonCopyable{
 		explicit World(sf::RenderWindow& window);
 		void update(sf::Time dt);
 		void draw();
+		float randNum(float min, float max);
 		
 		CommandQueue& getCommandQueue();
 
@@ -41,6 +42,7 @@ class World : private sf::NonCopyable{
 		sf::FloatRect getViewBounds() const;
 		sf::FloatRect getEnemySpawnBounds() const;
 		void handleCollisions();
+		void destroyActorsOutsideView();
 
 
 	private:

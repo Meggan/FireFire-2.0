@@ -5,7 +5,7 @@
 
 
 //Main class for all Actors/Entities
-class Entity : public SceneNode{
+class Actor : public SceneNode{
 	public:
 		void setVelocity(sf::Vector2f vel);
 		void setVelocity(float vx, float vy);
@@ -15,7 +15,7 @@ class Entity : public SceneNode{
 
 	//health for Entities
 	public:
-		explicit Entity(int hp);
+		explicit Actor(int hp);
 		void dmg(int dmg);
 		void destroy();
 		int getHP() const;

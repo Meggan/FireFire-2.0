@@ -3,7 +3,7 @@ set (SRC
 	Aircraft.cpp
 	Command.cpp
 	CommandQueue.cpp
-	Entity.cpp
+	Actor.cpp
 	Game.cpp
 	Player.cpp
 	SceneNode.cpp

@@ -12,7 +12,7 @@ namespace{
 	const std::vector<CharacterData> Table = initializeCharacterData();
 }
 
-Character::Character(Type type, const TextureHolder& textures) : Entity(Table[type].hp)
+Character::Character(Type type, const TextureHolder& textures) : Actor(Table[type].hp)
 , mType(type)
 , mSprite(textures.get(Table[type].texture))
 , mTravelledDistance(0.f)
@@ -40,7 +40,7 @@ void Character::updateCurrent(sf::Time dt, CommandQueue& commands){
 
 	// Update enemy movement pattern; apply velocity
 	updateMovementPattern(dt);
-	Entity::updateCurrent(dt, commands);
+	Actor::updateCurrent(dt, commands);
 }
 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const{

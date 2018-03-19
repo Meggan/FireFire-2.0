@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.hpp"
+#include "Actor.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "Weapon.h"
 #include "Command.hpp"
@@ -8,7 +8,7 @@
 #include <cmath>
 
 
-class Character : public Entity
+class Character : public Actor
 {
 	public:
 		enum Type {

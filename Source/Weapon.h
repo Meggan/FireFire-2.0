@@ -1,9 +1,9 @@
 #pragma once
-#include "Entity.hpp"
+#include "Actor.hpp"
 #include "ResourceIdentifiers.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 
-class Weapon : public Entity
+class Weapon : public Actor
 {
 public:
 	enum Type

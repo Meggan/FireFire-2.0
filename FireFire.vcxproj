@@ -106,7 +106,7 @@
     <ClCompile Include="source\Command.cpp" />
     <ClCompile Include="source\CommandQueue.cpp" />
     <ClCompile Include="Source\DataTables.cpp" />
-    <ClCompile Include="source\Entity.cpp" />
+    <ClCompile Include="source\Actor.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\Player.cpp" />
@@ -125,7 +125,7 @@
     <ClInclude Include="source\Command.hpp" />
     <ClInclude Include="source\CommandQueue.hpp" />
     <ClInclude Include="Source\DataTables.h" />
-    <ClInclude Include="source\Entity.hpp" />
+    <ClInclude Include="source\Actor.hpp" />
     <ClInclude Include="source\Foreach.hpp" />
     <ClInclude Include="source\Game.hpp" />
     <ClInclude Include="source\Player.hpp" />

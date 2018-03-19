@@ -13,7 +13,7 @@ World::World(sf::RenderWindow& window)
 , mTextures() 
 , mSceneGraph()
 , mSceneLayers()
-, mWorldBounds(0.f, 0.f, mWorldView.getSize().x, mWorldView.getSize().y)
+, mWorldBounds(0.f, 0.f, mWorldView.getSize().x, 20000.f)
 , mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
 , mScrollSpeed(-50.f)
 , mPlayerCharacter(nullptr)
@@ -29,7 +29,7 @@ World::World(sf::RenderWindow& window)
 void World::update(sf::Time dt)
 {
 	// Scroll the world, reset player velocity
-	//mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
+	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
 	mPlayerCharacter->setVelocity(0.f, 0.f);
 
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
@@ -137,33 +137,26 @@ void World::buildScene(){
 //add multiple enemies to the world
 void World::addEnemies(){
 	// Add enemies to the spawn point container
-	addEnemy(Character::EnemyZ, 0.f, 300.f);
-	addEnemy(Character::EnemyZ, +50.f, 500.f);
-	addEnemy(Character::EnemyZ, -80.f, 800.f);
-	addEnemy(Character::EnemyD, +100.f, 1000.f);
-	addEnemy(Character::EnemyZ, -70.f, 1200.f);
-	addEnemy(Character::EnemyZ, +120.f, 1200.f);
-	addEnemy(Character::EnemyD, +110.f, 1400.f);
-	addEnemy(Character::EnemyZ, -40.f, 1550.f);
-	addEnemy(Character::EnemyD, +100.f, 1600.f);
-	addEnemy(Character::EnemyD, -10.f, 1750.f);
-	addEnemy(Character::EnemyZ, -90.f, 1800.f);
-	addEnemy(Character::EnemyD, -45.f, 1900.f);
-	addEnemy(Character::EnemyZ, +40.f, 2050.f);
-	addEnemy(Character::EnemyZ, 0.f, 2050.f);
-	addEnemy(Character::EnemyZ, -200.f, 2050.f);
-	std::cout << "All Enemies created\n";
-
+	for (int i = 1; i < 10; ++i) {
+		addEnemy(Character::EnemyZ, (randNum(-150, +150)), (randNum(i * 500, i * 1000)));
+		addEnemy(Character::EnemyD, (randNum(-150, +150)), (randNum(i * 500, i * 1000)));
+		addEnemy(Character::EnemyZ, (randNum(-150, +150)), (randNum(i * 500, i * 1000)));
+	}
 	// Sort all enemies according to their y value, such that lower enemies are checked first for spawning
-	std::sort(mEnemySpawnPoints.begin(), mEnemySpawnPoints.end(), [](SpawnPoint lhs, SpawnPoint rhs)	{
-		std::cout << "All Enemies Sorted";
+	std::sort(mEnemySpawnPoints.begin(), mEnemySpawnPoints.end(), [](SpawnPoint lhs, SpawnPoint rhs) {
+		//std::cout << "All Enemies Sorted";
 		return lhs.y < rhs.y;
 	});
 }
 
+float World::randNum(float min, float max){
+	float r = (float)rand() / (float)RAND_MAX;
+	return min + r * (max - min);
+}
+
 void World::addEnemy(Character::Type type, float relX, float relY){
 	SpawnPoint spawn(type, mSpawnPosition.x + relX, mSpawnPosition.y - relY);
-	std::cout << "Spawning Enemy..";
+	//std::cout << "Spawning Enemy..";
 	mEnemySpawnPoints.push_back(spawn);
 }
 
@@ -188,8 +181,8 @@ void World::spawnEnemies(){
 sf::FloatRect World::getEnemySpawnBounds() const{
 	// Return view bounds + some area at top, where enemies spawn
 	sf::FloatRect bounds = getViewBounds();
-	bounds.top -= 3000.f;
-	bounds.height += 3000.f;
+	bounds.top -= 100;
+	bounds.height += 100;
 
 	return bounds;
 }
@@ -230,22 +223,35 @@ void World::handleCollisions()
 			auto& player = static_cast<Character&>(*pair.first);
 			auto& enemy = static_cast<Character&>(*pair.second);
 			//kill enemy
-			std::cout << "You bumped into someone!"<<std::endl;
 			player.dmg(enemy.getHP());
 			enemy.destroy();
+			std::cout << "You bumped into someone!" << std::endl << "Current HP: " << player.getHP() << std::endl;
 		}
 
 		//else if someone gets hit by a projectile
 		else if (matchesCategories(pair, Category::EnemyCharacter, Category::PlayerWeapon)
 			|| matchesCategories(pair, Category::PlayerCharacter, Category::EnemyWeapon))		{
 			//set types
-			auto& aircraft = static_cast<Character&>(*pair.first);
+			auto& enemy = static_cast<Character&>(*pair.first);
 			auto& projectile = static_cast<Weapon&>(*pair.second);
 
 			// Apply projectile damage to character, destroy projectile
-			std::cout << "Projectile hit something!"<< std::endl;
-			aircraft.dmg(projectile.getDamage());
+			std::cout << "Projectile hit someone!"<< std::endl << "Enemy HP: " << enemy.getHP() << std::endl;;
+			enemy.dmg(projectile.getDamage());
 			projectile.destroy();
 		}
 	}
+}
+
+void World::destroyActorsOutsideView()
+{
+	Command command;
+	command.category = Category::Weapon | Category::EnemyCharacter;
+	command.action = derivedAction<Actor>([this] (Actor& a, sf::Time)
+	{
+		if (!getEnemySpawnBounds().intersects(a.getBoundingRect()))
+			a.destroy();
+	});
+
+	mCommandQueue.push(command);
 }
