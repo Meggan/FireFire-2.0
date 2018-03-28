@@ -24,13 +24,15 @@ World::World(sf::RenderWindow& window)
 
 	// Prepare the view
 	mWorldView.setCenter(mSpawnPosition);
+	//probably better way to get y pos.. but better than nothing :^)
+	mPlayerCharacter->setPosition(235.f, mWorldBounds.height - mWorldView.getSize().y / 100.f);
 }
 
 void World::update(sf::Time dt)
 {
 	// Scroll the world, reset player velocity
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
-	mPlayerCharacter->setVelocity(0.f, 0.f);
+	mPlayerCharacter->setVelocity(0.f, -50.f);
 
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!mCommandQueue.isEmpty())

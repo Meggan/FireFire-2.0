@@ -28,6 +28,7 @@ Character::Character(Type type, const TextureHolder& textures) : Actor(Table[typ
 	mFireCommand.category = Category::Scene;
 	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time){
 		createBullets(node, textures);
+		std::cout << "bullets created" << std::endl;
 	};
 }
 
