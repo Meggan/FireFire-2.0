@@ -31,6 +31,10 @@ unsigned int Weapon::getCategory() const{
 		return Category::EnemyBulletZ;
 	else if (mType == EnemyBulletD)
 		return Category::EnemyBulletD;
+	else if (mType == EnemyBulletV)
+		return Category::EnemyBulletV;
+	else if (mType == EnemyBulletV2)
+		return Category::EnemyBulletV2;
 	else if (mType == PlayerBomb)
 		return Category::PlayerBomb;
 	else

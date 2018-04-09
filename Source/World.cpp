@@ -6,6 +6,8 @@
 #include <cmath>
 #include <limits>
 
+//creating view
+//sf::View view(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(400.0f, 400.0f));
 
 World::World(sf::RenderWindow& window)
 : mWindow(window)
@@ -13,9 +15,9 @@ World::World(sf::RenderWindow& window)
 , mTextures() 
 , mSceneGraph()
 , mSceneLayers()
-, mWorldBounds(0.f, 0.f, mWorldView.getSize().x, 20000.f)
+, mWorldBounds(0.f, 0.f, 2000.0f, 20000.f)
 , mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
-, mScrollSpeed(-50.f)
+, mScrollSpeed(0.f)
 , mPlayerCharacter(nullptr)
 , mEnemySpawnPoints()
 {
@@ -25,15 +27,15 @@ World::World(sf::RenderWindow& window)
 	// Prepare the view
 	mWorldView.setCenter(mSpawnPosition);
 	//probably better way to get y pos.. but better than nothing :^)
-	mPlayerCharacter->setPosition(235.f, mWorldBounds.height - mWorldView.getSize().y / 100.f);
+	mPlayerCharacter->setPosition(235.f, mWorldBounds.height - mWorldView.getSize().y / 2);
 }
 
 void World::update(sf::Time dt)
 {
 	// Scroll the world, reset player velocity
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
-	//mWorldView.setCenter(mSpawnPosition);
-	mPlayerCharacter->setVelocity(0.f, -50.f);
+	mWorldView.setCenter(mPlayerCharacter->getPosition());
+	mPlayerCharacter->setVelocity(0.f, 0.f);
 
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
 	while (!mCommandQueue.isEmpty())
@@ -52,7 +54,7 @@ void World::update(sf::Time dt)
 
 	// Regular update step, adapt position (correct if outside view)
 	mSceneGraph.update(dt, mCommandQueue);
-	adaptPlayerPosition();
+	//adaptPlayerPosition();
 }
 
 void World::draw()
@@ -76,9 +78,11 @@ void World::loadTextures()
 	mTextures.load(Textures::Ball, "Media/Textures/Pokeball.png");
 	mTextures.load(Textures::EnemyZ, "Media/Textures/Zubat.png");
 	mTextures.load(Textures::EnemyD, "Media/Textures/Dragonite.png");
+	mTextures.load(Textures::EnemyV, "Media/Textures/Electrode.png");
 	mTextures.load(Textures::Bomb, "Media/Textures/Electrode.png");
 	mTextures.load(Textures::BulletZ, "Media/Textures/BulletZ.png");
 	mTextures.load(Textures::BulletD, "Media/Textures/BulletD.png");
+	mTextures.load(Textures::BulletV, "Media/Textures/Pokeball.png");
 }
 
 
@@ -106,7 +110,7 @@ void World::adaptPlayerVelocity()
 		mPlayerCharacter->setVelocity(velocity / std::sqrt(2.f));
 
 	// Add scrolling velocity
-	//mPlayerCharacter->accelerate(0.f, mScrollSpeed);
+	mPlayerCharacter->accelerate(0.f, mScrollSpeed);
 }
 
 
@@ -144,9 +148,14 @@ void World::buildScene(){
 void World::addEnemies(){
 	// Add enemies to the spawn point container
 	for (int i = 1; i < 10; ++i) {
-		addEnemy(Character::EnemyZ, (randNum(-150, +150)), (randNum(i * 500, i * 1000)));
-		addEnemy(Character::EnemyD, (randNum(-150, +150)), (randNum(i * 500, i * 1000)));
-		addEnemy(Character::EnemyZ, (randNum(-150, +150)), (randNum(i * 500, i * 1000)));
+		addEnemy(Character::EnemyZ, (randNum(-150, +500)), (randNum(i * 250, i * 1000)));
+		addEnemy(Character::EnemyD, (randNum(-150, +500)), (randNum(i * 250, i * 1000)));
+		addEnemy(Character::EnemyV, (randNum(-150, +500)), (randNum(i * 250, i * 1000)));
+		addEnemy(Character::EnemyV2, (randNum(-150, 0)), (randNum(i * 250, i * 1000)));
+		addEnemy(Character::EnemyZ, (randNum(-150, +500)), (randNum(i * 250, i * 1000)));
+		addEnemy(Character::EnemyD, (randNum(-150, +500)), (randNum(i * 250, i * 1000)));
+		addEnemy(Character::EnemyV, (randNum(-150, +500)), (randNum(i * 250, i * 1000)));
+		addEnemy(Character::EnemyV2, (randNum(-150, 0)), (randNum(i * 250, i * 1000)));
 	}
 	// Sort all enemies according to their y value, such that lower enemies are checked first for spawning
 	std::sort(mEnemySpawnPoints.begin(), mEnemySpawnPoints.end(), [](SpawnPoint lhs, SpawnPoint rhs) {
@@ -187,8 +196,8 @@ void World::spawnEnemies(){
 sf::FloatRect World::getEnemySpawnBounds() const{
 	// Return view bounds + some area at top, where enemies spawn
 	sf::FloatRect bounds = getViewBounds();
-	bounds.top -= 5;
-	bounds.height += 5;
+	bounds.top -= 50;
+	bounds.height += 50;
 
 	return bounds;
 }

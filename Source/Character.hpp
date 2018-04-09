@@ -14,9 +14,11 @@ class Character : public Actor
 			Player,
 			EnemyZ,
 			EnemyD,
+			EnemyV,
+			EnemyV2,
 			TypeCount,
 
-			Enemy = EnemyZ | EnemyD,
+			Enemy = EnemyZ | EnemyD | EnemyV | EnemyV2,
 		};
 
 

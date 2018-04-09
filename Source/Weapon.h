@@ -10,11 +10,14 @@ public:
 		PlayerBullet,
 		EnemyBulletZ,
 		EnemyBulletD,
+		EnemyBulletV,
+		EnemyBulletV2,
 		PlayerBomb,
 		TypeCount,
 
 		PlayerProjectile = PlayerBullet | PlayerBomb,
-		EnemyProjectile = EnemyBulletD | EnemyBulletZ,
+		EnemyProjectile = EnemyBulletD | EnemyBulletZ | EnemyBulletV | EnemyBulletV2,
+
 	};
 
 	Weapon(Type type, const TextureHolder& textures);

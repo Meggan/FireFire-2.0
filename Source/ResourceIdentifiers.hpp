@@ -14,11 +14,15 @@ namespace Textures{
 		PlayerRight,
 		EnemyZ,
 		EnemyD,
+		EnemyV,
+		EnemyV2,
 		Background,
 		Ball,
 		Bomb,
 		BulletZ,
 		BulletD,
+		BulletV,
+		BulletV2,
 		TextureCount
 
 	};

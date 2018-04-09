@@ -13,12 +13,16 @@ namespace Category{
 		EnemyBulletZ = 1 << 5,
 		EnemyBulletD = 1 << 6,
 		PlayerBomb = 1 <<7,
+		EnemyCharacterV = 1 << 8,
+		EnemyBulletV = 1<<9,
+		EnemyCharacterV2 = 1 << 10,
+		EnemyBulletV2 = 1 << 11,
 
-		Character = PlayerCharacter | EnemyCharacterD | EnemyBulletZ,
-		EnemyCharacter = EnemyCharacterD | EnemyBulletZ,
-		Weapon = PlayerBullet | EnemyBulletD | EnemyBulletZ | PlayerBomb,
+		Character = PlayerCharacter | EnemyCharacterD | EnemyCharacterZ | EnemyCharacterV | EnemyCharacterV2,
+		EnemyCharacter = EnemyCharacterD | EnemyCharacterZ | EnemyCharacterV | EnemyCharacterV2,
+		Weapon = PlayerBullet | EnemyBulletD | EnemyBulletZ | EnemyBulletV | EnemyBulletV2 | PlayerBomb,
 		PlayerWeapon = PlayerBullet | PlayerBomb,
-		EnemyWeapon = EnemyCharacterD | EnemyBulletZ,
+		EnemyWeapon = EnemyCharacterD | EnemyBulletZ | EnemyBulletV | EnemyBulletV2,
 	};
 }
 

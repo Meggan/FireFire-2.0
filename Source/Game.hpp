@@ -26,4 +26,5 @@ private:
 		sf::Text mStatisticsText;
 		sf::Time mStatisticsUpdateTime;
 		std::size_t mStatisticsNumFrames;
+
 };
