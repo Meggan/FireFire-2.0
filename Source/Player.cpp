@@ -81,8 +81,8 @@ sf::Keyboard::Key Player::getAssignedKey(Action action) const{
 void Player::initializeActions(){
 	const float playerSpeed = 100.f;
 
-	//mActionBinding[MoveUp].action = derivedAction<Character>(CharacterMover(0.f, -playerSpeed));
-	//mActionBinding[MoveDown].action = derivedAction<Character>(CharacterMover(0.f, +playerSpeed));
+	mActionBinding[MoveUp].action = derivedAction<Character>(CharacterMover(0.f, -playerSpeed));
+	mActionBinding[MoveDown].action = derivedAction<Character>(CharacterMover(0.f, +playerSpeed));
 	mActionBinding[MoveLeft].action	 = derivedAction<Character>(CharacterMover(-playerSpeed, 0.f));
 	mActionBinding[MoveRight].action = derivedAction<Character>(CharacterMover(+playerSpeed, 0.f));
 	mActionBinding[Shoot].action = derivedAction<Character>([](Character& c, sf::Time) {
